@@ -10,6 +10,6 @@ public class ResultController {
 
     @GetMapping
     public String getResult(){
-        return "/result";
+        return "result";
     }
 }
