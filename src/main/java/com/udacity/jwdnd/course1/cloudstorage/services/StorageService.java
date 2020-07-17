@@ -32,4 +32,12 @@ public class StorageService {
         return filesMapper.getFiles(userId);
     }
 
+    public File getFile(String fileName, int userId){
+        return filesMapper.getFile(fileName, userId);
+    }
+
+    public int deleteFile(int fileId){
+        return filesMapper.deleteFileById(fileId);
+    }
+
 }
