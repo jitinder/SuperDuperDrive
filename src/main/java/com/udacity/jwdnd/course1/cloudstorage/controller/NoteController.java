@@ -46,7 +46,7 @@ public class NoteController {
         String errorMessage = null;
         boolean toUpdate = false;
 
-        if(note.getNoteId() != null && noteService.noteExists(note.getNoteId())){
+        if(note.getNoteId() != null){
             // Update Note
             int notesUpdated = noteService.updateNote(note);
             if(notesUpdated < 1){

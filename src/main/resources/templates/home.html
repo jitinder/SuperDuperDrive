@@ -135,14 +135,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="cred: ${credentialList}">
                                     <td>
-                                        <button type="button" class="btn btn-success">Edit</button>
-                                        <a class="btn btn-danger">Delete</a>
+                                        <button type="button" class="btn btn-success"
+                                        th:onClick="javascript: showCredentialModal([[${cred.credentialId}]], [[${cred.url}]], [[${cred.username}]], [[${encryptionService.decryptValue(cred.password, cred.key)}]])">
+                                            Edit</button>
+                                        <a class="btn btn-danger" th:href="${'/delete-credential/'+cred.credentialId}">Delete</a>
                                     </td>
-                                    <th scope="row">Example Credential URL</th>
-                                    <td>Example Credential Username</td>
-                                    <td>Example Credential Password</td>
+                                    <th scope="row" th:text="${cred.url}">Example Credential URL</th>
+                                    <td th:text="${cred.username}">Example Credential Username</td>
+                                    <td th:text="${cred.password}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -158,7 +160,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" method="POST">
+                                        <form action="#" th:action="@{'/add-credential'}" th:object="${newCredential}" method="POST">
                                             <input type="hidden" name="credentialId" id="credential-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">URL</label>

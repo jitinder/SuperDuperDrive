@@ -1,10 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
-import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
-import com.udacity.jwdnd.course1.cloudstorage.services.StorageService;
-import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,21 +20,27 @@ public class HomeController {
 
     private StorageService storageService;
     private NoteService noteService;
+    private CredentialService credentialService;
+    private EncryptionService encryptionService;
     private UserService userService;
 
     private List<File> fileList;
     private List<Note> noteList;
+    private List<Credential> credentialList;
 
-    public HomeController(UserService userService, StorageService storageService, NoteService noteService){
-        this.userService = userService;
+    public HomeController(StorageService storageService, NoteService noteService, CredentialService credentialService, EncryptionService encryptionService, UserService userService) {
         this.storageService = storageService;
         this.noteService = noteService;
+        this.credentialService = credentialService;
+        this.encryptionService = encryptionService;
+        this.userService = userService;
     }
 
     @PostConstruct
     public void postConstruct(){
         fileList = new ArrayList<>();
         noteList = new ArrayList<>();
+        credentialList = new ArrayList<>();
     }
 
     @GetMapping
@@ -44,9 +49,12 @@ public class HomeController {
 
         fileList = storageService.getFilesForUser(userId);
         noteList = noteService.getNotes(userId);
+        credentialList = credentialService.getCredentials(userId);
 
         model.addAttribute("fileList", fileList);
         model.addAttribute("noteList", noteList);
+        model.addAttribute("credentialList", credentialList);
+        model.addAttribute("encryptionService", encryptionService);
 
         return "home";
     }
