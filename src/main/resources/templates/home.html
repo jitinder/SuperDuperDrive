@@ -138,7 +138,7 @@
                                 <tr th:each="cred: ${credentialList}">
                                     <td>
                                         <button type="button" class="btn btn-success"
-                                        th:onClick="javascript: showCredentialModal([[${cred.credentialId}]], [[${cred.url}]], [[${cred.username}]], [[${encryptionService.decryptValue(cred.password, cred.key)}]])">
+                                        th:onClick="javascript: showCredentialModal([[${cred}]])">
                                             Edit</button>
                                         <a class="btn btn-danger" th:href="${'/delete-credential/'+cred.credentialId}">Delete</a>
                                     </td>
@@ -203,11 +203,12 @@
             }
 
             // For opening the credentials modal
-            function showCredentialModal(credentialId, url, username, password) {
-                $('#credential-id').val(credentialId ? credentialId : '');
-                $('#credential-url').val(url ? url : '');
-                $('#credential-username').val(username ? username : '');
-                $('#credential-password').val(password ? password : '');
+            function showCredentialModal(credential) {
+                $('#credential-id').val(credential ? credential.credentialId : '');
+                $('#credential-url').val(credential ? credential.url : '');
+                $('#credential-username').val(credential ? credential.username : '');
+                $('#credential-password').val(credential ? credential.password : '');
+                console.log(encryptionService);
                 $('#credentialModal').modal('show');
             }
         </script>

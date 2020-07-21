@@ -19,12 +19,16 @@ public class CredentialService {
         return credentialMapper.getCredentialsByUser(userId);
     }
 
+    public Credential getCredential(int credentialId){
+        return credentialMapper.getCredentialById(credentialId);
+    }
+
     public int addCredential(Credential credential){
         return credentialMapper.addCredential(credential);
     }
 
     public int updateCredential(Credential credential){
-        return credentialMapper.addCredential(credential);
+        return credentialMapper.updateCredentials(credential);
     }
 
     public int deleteCredential(int credentialId){

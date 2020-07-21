@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.SecureRandom;
+import java.util.Base64;
+
 @Controller
 public class CredentialController {
 
@@ -50,22 +53,22 @@ public class CredentialController {
         boolean toUpdate = false;
         int currentUserId = userService.getUserId(authentication.getName());
 
+        SecureRandom random = new SecureRandom();
+        byte[] key = new byte[16];
+        random.nextBytes(key);
+        String encodedKey = Base64.getEncoder().encodeToString(key);
+
+        credential.setUserId(currentUserId);
+        credential.setKey(encodedKey);
+        credential.setPassword(encryptionService.encryptValue(credential.getPassword(), credential.getKey()));
+
         if(credential.getCredentialId() != null){
-            // Update Credential
-            credential.setUserId(currentUserId);
-            credential.setKey("passwordgenerkey");
-            credential.setPassword(encryptionService.encryptValue(credential.getPassword(), credential.getKey()));
             int credsUpdated = credentialService.updateCredential(credential);
             if(credsUpdated < 1){
                 errorMessage = "There was an error updating your credential.";
             }
             toUpdate = true;
-        }
-
-        if(!toUpdate) {
-            credential.setUserId(currentUserId);
-            credential.setKey("passwordgenerkey");
-            credential.setPassword(encryptionService.encryptValue(credential.getPassword(), credential.getKey()));
+        } else {
             int credRows = credentialService.addCredential(credential);
 
             if (credRows < 1) {
