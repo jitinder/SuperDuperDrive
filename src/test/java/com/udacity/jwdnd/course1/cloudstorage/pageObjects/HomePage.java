@@ -92,6 +92,10 @@ public class HomePage {
         return noteDescriptionText.getText();
     }
 
+    public void deleteNote(){
+        deleteNoteButton.click();
+    }
+
     // Credentials Tab
 
 }

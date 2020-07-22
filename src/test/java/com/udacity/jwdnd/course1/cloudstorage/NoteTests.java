@@ -9,7 +9,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,7 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class NoteTests {
@@ -53,8 +53,7 @@ public class NoteTests {
         driver.close();
     }
 
-    @Test
-    public void addNote() {
+    private void addNewNote(String title, String desc){
         WebDriverWait wait = new WebDriverWait(driver, 20);
 
         // Explicit wait to make tab click work
@@ -66,10 +65,9 @@ public class NoteTests {
         homePage.openNotesTab();
         wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteButton())).click();
         wait.until(ExpectedConditions.visibilityOf(homePage.getNoteSubmit()));
-        homePage.createNewNote("Title", "Desc");
+        homePage.createNewNote(title, desc);
 
         ResultPage resultPage = new ResultPage(driver);
-        assertEquals("Success", resultPage.getStatus());
 
         try {
             Thread.sleep(2000);
@@ -86,7 +84,39 @@ public class NoteTests {
         }
         homePage.openNotesTab();
         wait.until(ExpectedConditions.visibilityOf(homePage.getNoteTitleText()));
+    }
+
+    @Test
+    public void addNote() {
+
+        addNewNote("Title", "Desc");
+
         assertEquals("Title", homePage.getNoteTitleTextValue());
         assertEquals("Desc", homePage.getNoteDescriptionTextValue());
+    }
+
+    @Test
+    public void deleteNote(){
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        addNewNote("Title", "Description");
+        homePage.deleteNote();
+
+        ResultPage resultPage = new ResultPage(driver);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        resultPage.getContinueLink().click();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        homePage.openNotesTab();
+        assertThrows(NoSuchElementException.class, () -> homePage.getNoteTitleText().click());
     }
 }
