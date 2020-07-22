@@ -4,6 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +47,14 @@ public class CredentialController {
 
         return "result";
     }
+
+    @GetMapping("/get-decrypted-password/{credId:.+}")
+    public ResponseEntity<String> getDecryptedPassword(@PathVariable(value = "credId") String credentialId){
+        Credential credential = credentialService.getCredential(Integer.parseInt(credentialId));
+        String decPass = encryptionService.decryptValue(credential.getPassword(), credential.getKey());
+        return ResponseEntity.ok(decPass);
+    }
+
 
     @PostMapping("/add-credential")
     public String addCredential(@ModelAttribute("new-credential") Credential credential, Model model, Authentication authentication){

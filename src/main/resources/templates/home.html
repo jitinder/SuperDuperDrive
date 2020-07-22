@@ -204,11 +204,18 @@
 
             // For opening the credentials modal
             function showCredentialModal(credential) {
+                const http = new XMLHttpRequest()
+
+                if(credential){
+                    http.open("GET", "http://localhost:8080/get-decrypted-password/" + credential.credentialId)
+                    http.setRequestHeader("Content-Type", "application/json")
+                    http.send()
+                    http.onload = () => $('#credential-password').val(http.responseText ? http.responseText : '');
+                }
+
                 $('#credential-id').val(credential ? credential.credentialId : '');
                 $('#credential-url').val(credential ? credential.url : '');
                 $('#credential-username').val(credential ? credential.username : '');
-                $('#credential-password').val(credential ? credential.password : '');
-                console.log(encryptionService);
                 $('#credentialModal').modal('show');
             }
         </script>
