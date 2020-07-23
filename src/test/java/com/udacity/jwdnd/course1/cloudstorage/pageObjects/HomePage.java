@@ -74,6 +74,10 @@ public class HomePage {
         return noteSubmit;
     }
 
+    public WebElement getNoteTitleText() {
+        return noteTitleText;
+    }
+
     public void createNewNote(String title, String description){
         noteTitle.sendKeys(title);
         noteDescription.sendKeys(description);
@@ -85,10 +89,6 @@ public class HomePage {
         noteDescription.clear();
         createNewNote(title, description);
 
-    }
-
-    public WebElement getNoteTitleText() {
-        return noteTitleText;
     }
 
     public String getNoteTitleTextValue() {
@@ -109,4 +109,79 @@ public class HomePage {
 
     // Credentials Tab
 
+    @FindBy(id = "add-credential")
+    private WebElement addCredentialButton;
+
+    @FindBy(id = "credential-url")
+    private WebElement credentialUrl;
+
+    @FindBy(id = "credential-username")
+    private WebElement credentialUsername;
+
+    @FindBy(id = "credential-password")
+    private WebElement credentialPassword;
+
+    @FindBy(id = "save-credential")
+    private WebElement credentialSubmit;
+
+    @FindBy(xpath = "//*[@id=\"nav-credentials\"]//tbody/tr/td/button")
+    private WebElement editCredentialButton;
+
+    @FindBy(xpath = "//*[@id=\"nav-credentials\"]//tbody/tr/td/a")
+    private WebElement deleteCredentialButton;
+
+    @FindBy(xpath = "//*[@id=\"nav-credentials\"]//tbody/tr/th")
+    private WebElement credentialUrlText;
+
+    @FindBy(xpath = "//*[@id=\"nav-credentials\"]//tbody/tr/td[2]")
+    private WebElement credentialUsernameText;
+
+    @FindBy(xpath = "//*[@id=\"nav-credentials\"]//tbody/tr/td[3]")
+    private WebElement credentialPasswordText;
+
+    public WebElement getAddCredentialButton() {
+        return addCredentialButton;
+    }
+
+    public WebElement getCredentialSubmit() {
+        return credentialSubmit;
+    }
+
+    public WebElement getCredentialUrlText() {
+        return credentialUrlText;
+    }
+
+    public void createNewCredential(String url, String username, String password){
+        credentialUrl.sendKeys(url);
+        credentialUsername.sendKeys(username);
+        credentialPassword.sendKeys(password);
+        credentialSubmit.click();
+    }
+
+    public void editCredential(String url, String username, String password){
+        credentialUrl.clear();
+        credentialUsername.clear();
+        credentialPassword.clear();
+        createNewCredential(url, username, password);
+    }
+
+    public String getCredentialUrlTextValue(){
+        return credentialUrlText.getText();
+    }
+
+    public String getCredentialUsernameTextValue(){
+        return credentialUsernameText.getText();
+    }
+
+    public String getCredentialPasswordTextValue(){
+        return credentialPasswordText.getText();
+    }
+
+    public void clickEditCredential(){
+        editCredentialButton.click();
+    }
+
+    public void deleteCredential(){
+        deleteCredentialButton.click();
+    }
 }
