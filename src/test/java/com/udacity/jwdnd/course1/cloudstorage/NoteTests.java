@@ -87,7 +87,7 @@ public class NoteTests {
     }
 
     @Test
-    public void addNote() {
+    public void addNote(){
 
         addNewNote("Title", "Desc");
 
@@ -109,6 +109,7 @@ public class NoteTests {
             e.printStackTrace();
         }
 
+        assertEquals("Success", resultPage.getStatus());
         resultPage.getContinueLink().click();
 
         try {
@@ -116,7 +117,41 @@ public class NoteTests {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         homePage.openNotesTab();
-        assertThrows(NoSuchElementException.class, () -> homePage.getNoteTitleText().click());
+        assertThrows(Exception.class, () -> homePage.getNoteTitleText().click());
+    }
+
+    @Test
+    public void editNote(){
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        addNewNote("Title", "Description");
+
+        homePage.clickEditNote();
+        wait.until(ExpectedConditions.visibilityOf(homePage.getNoteSubmit()));
+        homePage.editNote("NewTitle", "Desc");
+
+        ResultPage resultPage = new ResultPage(driver);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals("Success", resultPage.getStatus());
+        resultPage.getContinueLink().click();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        homePage.openNotesTab();
+        wait.until(ExpectedConditions.visibilityOf(homePage.getNoteTitleText()));
+
+        assertEquals("NewTitle", homePage.getNoteTitleTextValue());
+        assertEquals("Desc", homePage.getNoteDescriptionTextValue());
     }
 }

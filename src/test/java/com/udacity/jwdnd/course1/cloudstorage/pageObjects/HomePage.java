@@ -80,6 +80,13 @@ public class HomePage {
         noteSubmit.click();
     }
 
+    public void editNote(String title, String description){
+        noteTitle.clear();
+        noteDescription.clear();
+        createNewNote(title, description);
+
+    }
+
     public WebElement getNoteTitleText() {
         return noteTitleText;
     }
@@ -90,6 +97,10 @@ public class HomePage {
 
     public String getNoteDescriptionTextValue() {
         return noteDescriptionText.getText();
+    }
+
+    public void clickEditNote(){
+        editNoteButton.click();
     }
 
     public void deleteNote(){
