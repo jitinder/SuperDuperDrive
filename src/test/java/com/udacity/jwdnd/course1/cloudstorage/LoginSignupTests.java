@@ -65,6 +65,11 @@ class LoginSignupTests {
 		assertEquals("Home", driver.getTitle());
 
 		homePage = new HomePage(driver);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		homePage.logOut();
 		loginPage = new LoginPage(driver);
 		assertTrue(loginPage.loggedOut());
